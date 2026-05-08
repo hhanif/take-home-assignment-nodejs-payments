@@ -148,7 +148,9 @@ However, we ask for full transparency in your submission:
    - Any suggestions you rejected and why
    - Anything the AI got wrong that you had to correct
 
-There is no right or wrong answer here. Using AI extensively is fine. Using no AI is fine. What we're evaluating is your judgment — whether you understand and can defend the code you're submitting, and whether you can identify when AI output needs correction. We will ask about your AI_USAGE.md directly in the technical deep-dive.
+There is no right or wrong approach here. It is perfectly fine to use AI extensively, and it is also perfectly fine not to use AI at all. What we are evaluating is your engineering judgment: whether you understand the code you submit, can explain and defend your decisions, and can recognize when AI-generated output needs to be reviewed or corrected.
+
+During the technical deep-dive interview, we will ask you to walk us through your code and implement additional features or changes.
 
 ---
 

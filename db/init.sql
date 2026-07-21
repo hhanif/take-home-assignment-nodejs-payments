@@ -49,6 +49,18 @@ CREATE TABLE allocations (
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- The reporting paths always constrain and/or sort by close date. Separate
+-- leading columns keep the optional team and status filters indexable, while
+-- the allocation index makes the batched detail lookup and summary join cheap.
+CREATE INDEX commissions_close_date_id_idx
+  ON commissions (close_date DESC, id DESC);
+CREATE INDEX commissions_team_close_date_id_idx
+  ON commissions (team_id, close_date DESC, id DESC);
+CREATE INDEX commissions_status_close_date_id_idx
+  ON commissions (status, close_date DESC, id DESC);
+CREATE INDEX allocations_commission_id_idx
+  ON allocations (commission_id);
+
 -- -----------------------------------------------------------
 -- Reusable IDs
 -- -----------------------------------------------------------

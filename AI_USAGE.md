@@ -1,24 +1,30 @@
 # AI Tool Usage
 
-OpenAI Codex was used extensively for this assignment. It inspected the assignment, README, Docker Compose file, and complete SQL schema/seed; proposed the API contract; scaffolded the TypeScript service; wrote the parameterized PostgreSQL queries, tests, and documentation; and ran the local verification commands. Codex's installed gstack review workflow was also consulted during the final completeness audit. No repository-local agent or skill files were created, so there are no such files to commit.
+I used OpenAI Codex as a coding assistant during this assignment. I directed the scope, evaluated the trade-offs, reviewed the resulting implementation, and made the final decisions about what to keep or change. Codex helped accelerate repository analysis, draft portions of the TypeScript service, SQL, tests, and documentation, and automate repeatable verification commands.
 
-## Suggestions accepted as proposed
+I did not treat AI output as authoritative. Suggestions were checked against the assignment, the executable PostgreSQL schema, exact seeded totals, Node.js 18 compatibility, and the required real-database test strategy. Codex's installed gstack review workflow was also consulted during the final completeness audit. I did not create any repository-local agent or skill files.
+
+## Suggestions retained after review
+
+The following design suggestions were retained substantially as proposed after I reviewed and validated them:
 
 - Return PostgreSQL `BIGINT` cent values as decimal strings so JSON serialization cannot lose precision.
 - Fetch one page of commissions and all of that page's allocations in a constant two-query pattern, avoiding N+1 requests and join-driven pagination errors.
-- Produce all summary aggregates in one SQL statement, then zero-fill enum categories missing from grouped results.
+- Produce the summary aggregates in one SQL statement, then zero-fill enum categories missing from grouped results.
 - Use deterministic `closeDate DESC, id DESC` pagination and refuse to reset an integration database whose name does not end in `_test`.
 
-## Suggestions modified
+## Suggestions I modified
 
-- The first scaffold used Fastify 4. It was replaced with Express 5 after `npm audit` found unresolved advisories in the Node-18-compatible Fastify line and the remediated Fastify major proved incompatible with the assignment's Node 18 floor.
-- The executable schema's three allowed party types were used instead of inventing support for the prose-only `team` value in `ASSIGNMENT.md`.
-- An initial broad-index idea was narrowed to access-path-specific indexes rather than adding every possible composite permutation.
+- The first scaffold used Fastify 4. I changed it to Express 5 after `npm audit` identified unresolved advisories in the Node-18-compatible Fastify line and the remediated Fastify major proved incompatible with the assignment's Node.js 18 floor.
+- I treated the executable schema as authoritative and implemented its three allowed party types instead of inventing support for the prose-only `team` value in `ASSIGNMENT.md`.
+- I narrowed an initial broad-index proposal to indexes that match the actual reporting access paths rather than adding every possible composite permutation.
 
-## Suggestions rejected
+## Suggestions I rejected
 
-- Adding TypeORM or Knex was rejected because the service is read-only and its core work is explicit aggregation SQL; an ORM would add indirection without useful entity persistence behavior here.
-- Cursor pagination was rejected for this version because Finance benefits from total pages and the supplied reporting dataset is read-only. The README records cursor pagination as a future option for larger, concurrently changing datasets.
-- Adding a combined `(team_id, status, close_date)` index was rejected until production query statistics show that the narrower optional-filter combination justifies another overlapping index.
+- I rejected adding TypeORM or Knex because the service is read-only and its core work is explicit aggregation SQL; an ORM would add indirection without useful entity-persistence behavior here.
+- I rejected cursor pagination for this version because Finance benefits from total pages and the supplied reporting dataset is read-only. The README records cursor pagination as a future option for larger, concurrently changing datasets.
+- I rejected a combined `(team_id, status, close_date)` index until production query statistics show that the narrower optional-filter combination justifies another overlapping index.
 
-The generated work was reviewed iteratively against every assignment requirement and exercised with strict type checking, unit tests, real-PostgreSQL integration tests, a dependency audit, a production build, and HTTP smoke tests. The initial Fastify dependency choice was the main AI-generated issue discovered and corrected. There are no known uncorrected AI errors at handoff.
+## Corrections and verification
+
+The initial Fastify dependency choice was the main AI-generated issue I identified and corrected. I verified the final implementation with strict type checking, a production build, unit tests, real-PostgreSQL integration tests, exact seeded-value assertions, Node.js 18 compatibility, a dependency audit, and HTTP smoke tests. There are no known uncorrected AI-generated issues in the submitted implementation.
